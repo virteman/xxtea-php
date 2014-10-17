@@ -1,7 +1,7 @@
 <?php
 /**
  *                                                    
- * XXTEA::class.php                                    
+ * self::class.php                                    
  *                                                    
  * XXTEA encryption algorithm library for PHP.        
  *                                                    
@@ -19,7 +19,7 @@
 
 class XXTEA {
 
-	const "XXTEA_DELTA" = 0x9E3779B9;
+	const XXTEA_DELTA = 0x9E3779B9;
 
 	//long int convert to string
     private static function long2str($v, $w) {
@@ -76,24 +76,24 @@ class XXTEA {
         if ($str == "") {
             return "";
         }
-        $v = XXTEA::str2long($str, true);
-        $k = XXTEA::fixk(XXTEA::str2long($key, false));
+        $v = self::str2long($str, true);
+        $k = self::fixk(self::str2long($key, false));
         $n = count($v) - 1;
         $z = $v[$n];
         $y = $v[0];
         $q = floor(6 + 52 / ($n + 1));
         $sum = 0;
         while (0 < $q--) {
-            $sum = XXTEA::int32($sum + XXTEA_DELTA);
+            $sum = self::int32($sum + self::XXTEA_DELTA);
             $e = $sum >> 2 & 3;
             for ($p = 0; $p < $n; $p++) {
                 $y = $v[$p + 1];
-                $z = $v[$p] = XXTEA::int32($v[$p] + XXTEA::mx($sum, $y, $z, $p, $e, $k));
+                $z = $v[$p] = self::int32($v[$p] + self::mx($sum, $y, $z, $p, $e, $k));
             }
             $y = $v[0];
-            $z = $v[$n] = XXTEA::int32($v[$n] + XXTEA::mx($sum, $y, $z, $p, $e, $k));
+            $z = $v[$n] = self::int32($v[$n] + self::mx($sum, $y, $z, $p, $e, $k));
         }
-        return XXTEA::long2str($v, false);
+        return self::long2str($v, false);
     }
 
     /**
@@ -104,25 +104,25 @@ class XXTEA {
         if ($str == "") {
             return "";
         }
-        $v = XXTEA::str2long($str, false);
-        $k = XXTEA::fixk(XXTEA::str2long($key, false));
+        $v = self::str2long($str, false);
+        $k = self::fixk(self::str2long($key, false));
         $n = count($v) - 1;
 
         $z = $v[$n];
         $y = $v[0];
         $q = floor(6 + 52 / ($n + 1));
-        $sum = XXTEA::int32($q * XXTEA_DELTA);
+        $sum = self::int32($q * XXTEA_DELTA);
         while ($sum != 0) {
             $e = $sum >> 2 & 3;
             for ($p = $n; $p > 0; $p--) {
                 $z = $v[$p - 1];
-                $y = $v[$p] = XXTEA::int32($v[$p] - XXTEA::mx($sum, $y, $z, $p, $e, $k));
+                $y = $v[$p] = self::int32($v[$p] - self::mx($sum, $y, $z, $p, $e, $k));
             }
             $z = $v[$n];
-            $y = $v[0] = XXTEA::int32($v[0] - XXTEA::mx($sum, $y, $z, $p, $e, $k));
-            $sum = XXTEA::int32($sum - XXTEA_DELTA);
+            $y = $v[0] = self::int32($v[0] - self::mx($sum, $y, $z, $p, $e, $k));
+            $sum = self::int32($sum - XXTEA_DELTA);
         }
-        return XXTEA::long2str($v, true);
+        return self::long2str($v, true);
     }
 }
 ?>
